@@ -26,4 +26,5 @@ while True:
     # Touch pad 2 to decrease the brightness.
     pixels.brightness -= 0.05
     pixels.show()
+
     touched = time.monotonic()
