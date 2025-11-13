@@ -27,7 +27,7 @@ displayio.release_displays()
 matrix = rgbmatrix.RGBMatrix(
     width = 64,
     height = 64,
-    bit_depth = 3,
+    bit_depth = 4,
     rgb_pins = [board.MTX_R1,
                 board.MTX_G1,
                 board.MTX_B1,
@@ -53,11 +53,6 @@ display.root_group = main_group
 
 # load images into memory
 face_gif = gifio.OnDiskGif('images/face.gif')
-heart_image, heart_palette = adafruit_imageload.load(
-    file_or_filename = 'images/heart.gif',
-    bitmap = displayio.Bitmap,
-    palette = displayio.Palette)
-heart_palette.make_transparent(0)
 heart_gif = gifio.OnDiskGif('images/heart.gif')
 
 # initialization of variables for background
@@ -71,25 +66,40 @@ colors = [
 
 current_background_color = 0
 
-# create tile map for foreground
-foreground = displayio.TileGrid(
+# create tile map for each gif
+face_grid = displayio.TileGrid(
+    bitmap = face_gif.bitmap,
+    pixel_shader = displayio.ColorConverter(
+        input_colorspace = displayio.Colorspace.RGB565
+    ))
+face_gif.next_frame()
+
+heart_grid = displayio.TileGrid(
     bitmap = heart_gif.bitmap,
-    pixel_shader = heart_palette)
+    pixel_shader = displayio.ColorConverter(
+        input_colorspace = displayio.Colorspace.RGB565
+    ))
+heart_gif.next_frame()
 
 # add background tilegrid here when ready
-main_group.append(foreground)
+main_group.append(face_grid)
 display.refresh()
 
 # function definitions
 
-# takes in an image palette and desired brightness, returns the adjusted palette
-def adjust_brightness(input_palette, desired_brightness):
+# updates displayed face gif
+def change_face():
     pass
 
 # advances the background by 1 frame
 def update_background():
     pass
 
+# advances the currently selected face by 1 frame
+def update_face():
+    pass
+
 # main loop
 while True:
-    time.sleep(1)
+    display.refresh()
+    time.sleep(face_gif.next_frame())
