@@ -43,22 +43,6 @@ colors = [
   PURPLE
 ]
 
-# create and display a loading screen to show while initializing
-'''loading_screen, loading_palette = adafruit_imageload.load("/clock.bmp", bitmap=displayio.Bitmap, palette=displayio.Palette)
-loading_grid = displayio.TileGrid(loading_screen, pixel_shader=loading_palette)
-loading_group = displayio.Group()
-loading_group.append(loading_grid)
-display.root_group = loading_group
-
-loading_color = []
-
-for i in range(len(loading_palette)):
-  loading_color.append(loading_palette[i])
-  loading_color[i] = fancy.unpack(loading_color[i])
-  loading_color[i] = fancy.gamma_adjust(loading_color[i], brightness=0.25)
-  loading_color[i] = fancy.denormalize(loading_color[i])
-  loading_palette[i] = loading_color[i]'''
-
 display.refresh()
 
 # create a bitmap to display a heart animation on top of the background
