@@ -1,22 +1,12 @@
-# face driver code for momo cosplay
-
-# TODO:
-# make good
-
-# module imports
-import random
 import time
 import board
 import digitalio
-import displayio
-import framebufferio
-import terminalio
-import rgbmatrix
 import adafruit_imageload
-import gifio
+import displayio
+import rgbmatrix
+import framebufferio
 
 from adafruit_debouncer import Debouncer
-from adafruit_led_animation.color import *
 
 # release any previously initialized displays before running any code
 displayio.release_displays()
@@ -49,35 +39,32 @@ display.refresh()
 main_group = displayio.Group()
 display.root_group = main_group
 
-# load images into memory
-face_gif = gifio.OnDiskGif('images/face.gif')
-heart_gif = gifio.OnDiskGif('images/heart.gif')
+# load test images
+img_1 = displayio.OnDiskBitmap('images/1.bmp')
+img_2 = displayio.OnDiskBitmap('images/2.bmp')
+img_3 = displayio.OnDiskBitmap('images/3.bmp')
+img_4 = displayio.OnDiskBitmap('images/4.bmp')
 
-# initialization of variables for background
-colors = [
-    RED,
-    ORANGE,
-    YELLOW,
-    GREEN,
-    BLUE,
-    PURPLE]
+# create tilegrids for each image
+img_1_grid = displayio.TileGrid(
+    bitmap = img_1,
+    pixel_shader = img_1.pixel_shader
+)
 
-current_background_color = 0
+img_2_grid = displayio.TileGrid(
+    bitmap = img_2,
+    pixel_shader = img_2.pixel_shader
+)
 
-# create tile map for each gif
-face_grid = displayio.TileGrid(
-    bitmap = face_gif.bitmap,
-    pixel_shader = displayio.ColorConverter(
-        input_colorspace = displayio.Colorspace.RGB565
-    ))
-face_gif.next_frame()
+img_3_grid = displayio.TileGrid(
+    bitmap = img_3,
+    pixel_shader = img_3.pixel_shader
+)
 
-heart_grid = displayio.TileGrid(
-    bitmap = heart_gif.bitmap,
-    pixel_shader = displayio.ColorConverter(
-        input_colorspace = displayio.Colorspace.RGB565
-    ))
-heart_gif.next_frame()
+img_4_grid = displayio.TileGrid(
+    bitmap = img_4,
+    pixel_shader = img_4.pixel_shader
+)
 
 # define buttons
 button_1_pin = digitalio.DigitalInOut(board.A2)
@@ -100,25 +87,19 @@ button_4_pin.direction = digitalio.Direction.INPUT
 button_4_pin.pull = digitalio.Pull.UP
 button_4 = Debouncer(button_4_pin)
 
-#<add background tilegrid here when ready>
-main_group.append(face_grid)
-display.refresh()
-
-# function definitions
-
-# updates displayed face gif
-def change_face():
-    pass
-
-# advances the background by 1 frame
-def update_background():
-    pass
-
-# advances the currently selected face by 1 frame
-def update_face():
-    pass
-
-# main loop
 while True:
-    display.refresh()
-    time.sleep(face_gif.next_frame())
+    button_1.update()
+    button_2.update()
+    button_3.update()
+    button_4.update()
+
+    if(not button_1.value):
+        print("Pressed 1")
+    if(not button_2.value):
+        print("Pressed 2")
+    if(not button_3.value):
+        print("Pressed 3")
+    if(not button_4.value):
+        print("Pressed 4")
+
+    time.sleep(0.1)
