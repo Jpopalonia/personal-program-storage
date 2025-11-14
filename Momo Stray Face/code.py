@@ -143,10 +143,11 @@ current_delay = gifs[current_face].next_frame()
 while True:
     current_time = time.monotonic()
 
-    for i in len(buttons):
+    for i in range(len(buttons)):
         buttons[i].update()
     
     if(current_time - last_update >= current_delay):
         last_update = time.monotonic()
         gifs[current_face].next_frame()
+
         display.refresh()
