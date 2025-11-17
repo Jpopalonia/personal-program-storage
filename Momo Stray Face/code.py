@@ -67,11 +67,15 @@ background_colors = [
     BLUE,
     PURPLE]
 
-background_palette = []
+background_palette = displayio.Palette(
+    color_count = len(background_colors)
+)
+
 for i in range(len(background_colors)):
-    background_palette.append(background_colors[i])
+    background_palette[i] = background_colors[i]
 
 current_background_color = 0
+bg_color_start = 0
 current_face = 0
 
 # create tile map for each gif
@@ -97,9 +101,9 @@ tile_grids.append(heart_grid)
 
 # background tile grid
 background_bitmap = displayio.Bitmap(
-    width = display.width,
-    height = display.height,
-    value_count = len(background_colors))
+    display.width,
+    display.height,
+    len(background_colors))
 
 background_grid = displayio.TileGrid(
     bitmap = background_bitmap,
@@ -154,13 +158,15 @@ def change_face(new_face):
 
 # advances the background by 1 frame
 def update_background():
+    global bg_color_start
     global current_background_color
 
     for y in range(background_bitmap.height):
-      curr_color = y + current_background_color
+      current_background_color = y + bg_color_start
       for x in range(background_bitmap.width):
-        background_bitmap[x, y] = curr_color % len(background_colors)
-        curr_color += 1
+        background_bitmap[x, y] = current_background_color % len(background_colors)
+        current_background_color += 1
+    bg_color_start += 1
 
 change_face(current_face)
 current_delay = gifs[current_face].next_frame()
@@ -178,5 +184,6 @@ while True:
     if(current_time - last_update >= current_delay):
         last_update = time.monotonic()
 
+        update_background()
         gifs[current_face].next_frame()
         display.refresh()
