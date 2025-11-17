@@ -87,8 +87,9 @@ face_grid = displayio.TileGrid(
         input_colorspace = displayio.Colorspace.RGB565
     ))
 
+# black is treated as transparent
+face_grid.pixel_shader.make_transparent(0x000000) 
 tile_grids.append(face_grid)
-face_grid.pixel_shader.make_transparent(0x000000)
 
 heart_grid = displayio.TileGrid(
     bitmap = heart_gif.bitmap,
@@ -96,6 +97,7 @@ heart_grid = displayio.TileGrid(
         input_colorspace = displayio.Colorspace.RGB565
     ))
 
+# black is treated as transparent
 heart_grid.pixel_shader.make_transparent(0x000000)
 tile_grids.append(heart_grid)
 
@@ -168,6 +170,7 @@ def update_background():
         current_background_color += 1
     bg_color_start += 1
 
+update_background()
 change_face(current_face)
 current_delay = gifs[current_face].next_frame()
 
