@@ -67,10 +67,6 @@ background_colors = [
     BLUE,
     PURPLE]
 
-background_palette = []
-for i in range(len(background_colors)):
-    background_palette.append(background_colors[i])
-
 current_background_color = 0
 current_face = 0
 
@@ -94,16 +90,6 @@ heart_grid = displayio.TileGrid(
 
 heart_grid.pixel_shader.make_transparent(0x000000)
 tile_grids.append(heart_grid)
-
-# background tile grid
-background_bitmap = displayio.Bitmap(
-    width = display.width,
-    height = display.height,
-    value_count = len(background_colors))
-
-background_grid = displayio.TileGrid(
-    bitmap = background_bitmap,
-    pixel_shader = background_palette)
 
 # define buttons
 buttons = []
@@ -132,7 +118,7 @@ button_3_pin.pull = digitalio.Pull.UP
 button_3 = adafruit_debouncer.Button(button_3_pin)
 buttons.append(button_3)
 
-main_group.append(background_grid)
+#main_group.append(background_grid)
 main_group.append(tile_grids[current_face])
 display.refresh()
 
@@ -154,13 +140,7 @@ def change_face(new_face):
 
 # advances the background by 1 frame
 def update_background():
-    global current_background_color
-
-    for y in range(background_bitmap.height):
-      curr_color = y + current_background_color
-      for x in range(background_bitmap.width):
-        background_bitmap[x, y] = curr_color % len(background_colors)
-        curr_color += 1
+    pass
 
 change_face(current_face)
 current_delay = gifs[current_face].next_frame()
@@ -179,4 +159,5 @@ while True:
         last_update = time.monotonic()
 
         gifs[current_face].next_frame()
+
         display.refresh()
