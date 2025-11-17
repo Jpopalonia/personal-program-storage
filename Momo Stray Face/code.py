@@ -3,17 +3,17 @@
 # TODO:
 # make good
 
+# Notes:
+# black is treated as transparent within the foreground gifs
+
 # module imports
-import random
 import time
 import board
 import adafruit_debouncer
 import digitalio
 import displayio
 import framebufferio
-import terminalio
 import rgbmatrix
-import adafruit_imageload
 import gifio
 
 from adafruit_led_animation.color import *
@@ -44,6 +44,7 @@ matrix = rgbmatrix.RGBMatrix(
 # initialize the display framebuffer
 display = framebufferio.FramebufferDisplay(
     framebuffer = matrix,
+    rotation = 0,
     auto_refresh = False)
 display.refresh()
 main_group = displayio.Group()
@@ -58,7 +59,7 @@ heart_gif = gifio.OnDiskGif('images/heart.gif')
 gifs.append(heart_gif)
 
 # initialization of variables for background
-colors = [
+background_colors = [
     RED,
     ORANGE,
     YELLOW,
@@ -66,75 +67,100 @@ colors = [
     BLUE,
     PURPLE]
 
-current_background_color = 0
+background_palette = []
+for i in range(len(background_colors)):
+    background_palette.append(background_colors[i])
 
-tile_grids = []
+current_background_color = 0
+current_face = 0
 
 # create tile map for each gif
+tile_grids = []
+
 face_grid = displayio.TileGrid(
     bitmap = face_gif.bitmap,
     pixel_shader = displayio.ColorConverter(
         input_colorspace = displayio.Colorspace.RGB565
     ))
+
 tile_grids.append(face_grid)
+face_grid.pixel_shader.make_transparent(0x000000)
 
 heart_grid = displayio.TileGrid(
     bitmap = heart_gif.bitmap,
     pixel_shader = displayio.ColorConverter(
         input_colorspace = displayio.Colorspace.RGB565
     ))
+
+heart_grid.pixel_shader.make_transparent(0x000000)
 tile_grids.append(heart_grid)
+
+# background tile grid
+background_bitmap = displayio.Bitmap(
+    width = display.width,
+    height = display.height,
+    value_count = len(background_colors))
+
+background_grid = displayio.TileGrid(
+    bitmap = background_bitmap,
+    pixel_shader = background_palette)
 
 # define buttons
 buttons = []
 
-button_1_pin = digitalio.DigitalInOut(board.A2)
+button_0_pin = digitalio.DigitalInOut(board.A2)
+button_0_pin.direction = digitalio.Direction.INPUT
+button_0_pin.pull = digitalio.Pull.UP
+button_0 = adafruit_debouncer.Button(button_0_pin)
+buttons.append(button_0)
+
+button_1_pin = digitalio.DigitalInOut(board.A3)
 button_1_pin.direction = digitalio.Direction.INPUT
 button_1_pin.pull = digitalio.Pull.UP
 button_1 = adafruit_debouncer.Button(button_1_pin)
 buttons.append(button_1)
 
-button_2_pin = digitalio.DigitalInOut(board.A3)
+button_2_pin = digitalio.DigitalInOut(board.A4)
 button_2_pin.direction = digitalio.Direction.INPUT
 button_2_pin.pull = digitalio.Pull.UP
 button_2 = adafruit_debouncer.Button(button_2_pin)
 buttons.append(button_2)
 
-button_3_pin = digitalio.DigitalInOut(board.A4)
+button_3_pin = digitalio.DigitalInOut(board.A1)
 button_3_pin.direction = digitalio.Direction.INPUT
 button_3_pin.pull = digitalio.Pull.UP
 button_3 = adafruit_debouncer.Button(button_3_pin)
 buttons.append(button_3)
 
-button_4_pin = digitalio.DigitalInOut(board.A1)
-button_4_pin.direction = digitalio.Direction.INPUT
-button_4_pin.pull = digitalio.Pull.UP
-button_4 = adafruit_debouncer.Button(button_4_pin)
-buttons.append(button_4)
-
-#<add background tilegrid here when ready>
-main_group.append(face_grid)
+main_group.append(background_grid)
+main_group.append(tile_grids[current_face])
 display.refresh()
-
-# misc global variables
-current_face = 0
 
 current_time = time.monotonic()
 last_update = time.monotonic()
 
 # function definitions
 
-# updates displayed face gif
+# updates current displayed face gif
 def change_face(new_face):
-    pass
+    global main_group
+    global current_face
+        
+    main_group.remove(tile_grids[current_face])
+    current_face = new_face
+    main_group.append(tile_grids[current_face])
+    gifs[current_face].next_frame()
+    display.refresh()
 
 # advances the background by 1 frame
 def update_background():
-    pass
+    global current_background_color
 
-# advances the currently selected face by 1 frame
-def update_face():
-    pass
+    for y in range(background_bitmap.height):
+      curr_color = y + current_background_color
+      for x in range(background_bitmap.width):
+        background_bitmap[x, y] = curr_color % len(background_colors)
+        curr_color += 1
 
 change_face(current_face)
 current_delay = gifs[current_face].next_frame()
@@ -143,11 +169,14 @@ current_delay = gifs[current_face].next_frame()
 while True:
     current_time = time.monotonic()
 
+    # check the state of all defined buttons
     for i in range(len(buttons)):
         buttons[i].update()
+        if(buttons[i].pressed):
+            change_face(i)
     
     if(current_time - last_update >= current_delay):
         last_update = time.monotonic()
-        gifs[current_face].next_frame()
 
+        gifs[current_face].next_frame()
         display.refresh()
