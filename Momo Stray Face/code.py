@@ -25,7 +25,7 @@ displayio.release_displays()
 matrix = rgbmatrix.RGBMatrix(
     width = 64,
     height = 64,
-    bit_depth = 4,
+    bit_depth = 2,
     rgb_pins = [board.MTX_R1,
                 board.MTX_G1,
                 board.MTX_B1,
