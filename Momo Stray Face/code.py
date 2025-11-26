@@ -1,10 +1,17 @@
 # face driver code for momo cosplay
 
-# TODO:
-# make good
-
 # Notes:
 # black is treated as transparent within the foreground gifs
+
+# TODO:
+# add comments to code
+# finish art
+# maybe update background?
+# add images to program
+# add buttons to board and correct pins
+# find way to mount like 8 buttons to hand or control panel?
+# if i need more than 4 i'll need an I2C expansion board
+# print remaining memory after initialization?
 
 # module imports
 import time
@@ -50,12 +57,15 @@ display.refresh()
 main_group = displayio.Group()
 display.root_group = main_group
 
-# load images into memory
+# load PNG background into memory (maybe)
+
+# load faces into memory
 gifs = []
 
-face_gif = gifio.OnDiskGif('images/face.gif')
-gifs.append(face_gif)
-heart_gif = gifio.OnDiskGif('images/heart.gif')
+neutral_face_gif = gifio.OnDiskGif('faces/face.gif')
+gifs.append(neutral_face_gif)
+
+heart_gif = gifio.OnDiskGif('faces/heart.gif')
 gifs.append(heart_gif)
 
 # initialization of variables for background
@@ -81,21 +91,23 @@ current_face = 0
 # create tile map for each gif
 tile_grids = []
 
-face_grid = displayio.TileGrid(
-    bitmap = face_gif.bitmap,
+neutral_face_grid = displayio.TileGrid(
+    bitmap = neutral_face_gif.bitmap,
     pixel_shader = displayio.ColorConverter(
         input_colorspace = displayio.Colorspace.RGB565
-    ))
+    )
+)
 
 # black is treated as transparent
-face_grid.pixel_shader.make_transparent(0x000000) 
-tile_grids.append(face_grid)
+neutral_face_grid.pixel_shader.make_transparent(0x000000) 
+tile_grids.append(neutral_face_grid)
 
 heart_grid = displayio.TileGrid(
     bitmap = heart_gif.bitmap,
     pixel_shader = displayio.ColorConverter(
         input_colorspace = displayio.Colorspace.RGB565
-    ))
+    )
+)
 
 # black is treated as transparent
 heart_grid.pixel_shader.make_transparent(0x000000)
