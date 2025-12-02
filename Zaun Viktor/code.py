@@ -1,6 +1,8 @@
 import time
 import board
 import pwmio
+import adafruit_aw9523
+
 import pwm_lightness
 PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255)
 
