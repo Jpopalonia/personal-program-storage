@@ -4,10 +4,25 @@ import pwmio
 import adafruit_aw9523
 
 import pwm_lightness
-PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255)
+PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # look into this and re-learn how it works
 
-pin1 = pwmio.PWMOut(board.D3)
-pin2 = pwmio.PWMOut(board.D4)
+# may need fixed once i can get my hands on a board for testing
+i2c = board.I2C()
+aw = adafruit_aw9523.AW9523(i2c)
+
+# set all pins to output and LED (constant current) mode
+aw.LED_modes = 0xFFFF
+aw.directions = 0xFFFF
+
+# maybe set max current to 50mA/0.05A?
+aw.constant_current_range = 0.05
+
+aw.set_constant_current(0, 255) # set pin1 to max current (approx 37mA according to the datasheet)
+aw.set_constant_current(1, 255) # set pin2 to max current
+
+# do these even support PWM? (probably not tbh)
+pin1 = aw.get_pin(0)
+pin2 = aw.get_pin(1)
 
 increasing1 = True
 increasing2 = True
@@ -15,6 +30,7 @@ increasing2 = True
 value1 = 90
 value2 = 230
 
+# main loop (elaborate on how this works, maybe roll up some functions from this)
 while True:
     if value1 >= 255:
         increasing1 = False
