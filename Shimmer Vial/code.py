@@ -1,3 +1,5 @@
+# show a pulsing animation
+
 import time
 import board
 import neopixel

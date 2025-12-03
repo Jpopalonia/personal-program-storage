@@ -1,3 +1,5 @@
+# turn on and show a static color
+
 import time
 import board
 import neopixel
