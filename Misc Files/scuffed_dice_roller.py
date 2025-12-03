@@ -1,3 +1,5 @@
+# simulates dice rolls in the Python interpreter
+
 import random
 
 result = 0

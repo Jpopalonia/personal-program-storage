@@ -1,4 +1,4 @@
-# show a pulsing animation
+# show a pulsing animation, synced on all LEDs
 
 import time
 import board

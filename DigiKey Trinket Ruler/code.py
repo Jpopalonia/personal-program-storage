@@ -1,3 +1,5 @@
+# included example for Adafruit Trinket Ruler
+
 import os
 import board
 from digitalio import DigitalInOut, Direction

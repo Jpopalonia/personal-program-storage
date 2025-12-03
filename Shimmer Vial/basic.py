@@ -1,4 +1,4 @@
-# turn on and show a static color
+# turn on and show a static color on neopixel jewel (7 LEDs)
 
 import time
 import board

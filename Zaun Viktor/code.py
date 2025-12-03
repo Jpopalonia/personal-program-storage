@@ -3,8 +3,9 @@
 import time
 import board
 import pwmio
+
 import pwm_lightness
-PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255)
+PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # precalculate gamma corrected values
 
 pin1 = pwmio.PWMOut(board.D3)
 pin2 = pwmio.PWMOut(board.D4)

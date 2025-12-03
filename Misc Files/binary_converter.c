@@ -1,3 +1,5 @@
+// takes decimal number input from command line and outputs binary representation byte
+
 #include <stdio.h>
 #include <stdbool.h>
 

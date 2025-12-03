@@ -11,6 +11,9 @@
 
 # NOTE! Requires the adafruit_hid CircuitPython library also!
 
+# TODO:
+# broken? need to troubleshoot, does not play properly on keybow board
+
 import board
 from keybow2040 import Keybow2040
 
