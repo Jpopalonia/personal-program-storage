@@ -1,3 +1,5 @@
+# show a swirly pulsing animation that runs around the outside
+
 import time
 import board
 import neopixel

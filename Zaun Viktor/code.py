@@ -1,3 +1,5 @@
+# pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
+
 import time
 import board
 import pwmio

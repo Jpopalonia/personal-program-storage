@@ -1,3 +1,5 @@
+// this file is a template for a 16x2 LCD
+
 #include <LiquidCrystal.h>
 
 LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
