@@ -1,6 +1,6 @@
-// This project uses 2 push-buttons to control the position of a servo
+// this project uses 2 push-buttons to control the position of a servo
 
-// Preprocessor
+// preprocessor
 #include <Servo.h>
 
 // Pin definitions
@@ -10,7 +10,7 @@
 
 #define speed 2
 
-// Variables
+// variables
 Servo servo;
 
 int currAngle = 0;

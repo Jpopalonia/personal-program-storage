@@ -1,4 +1,5 @@
 # face driver code for momo cosplay
+# as is, program is intended to be run on Adafruit Matrix Portal S3 wired to a 64x64 display
 
 # Notes:
 # black is treated as transparent within the foreground gifs

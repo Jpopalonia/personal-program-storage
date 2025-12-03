@@ -1,7 +1,14 @@
+# program for Adafruit Trinkey
+# shows rainbow cycling on all LEDs, brightness changes on touching either pad
+
+# TODO:
+# potentially add gamma correction with fancyled or manually calculated gamma
+
 import time
 import board
 import touchio
 import neopixel
+
 from rainbowio import colorwheel
 
 touch1 = touchio.TouchIn(board.TOUCH1)

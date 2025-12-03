@@ -1,4 +1,4 @@
-# show a swirly pulsing animation that runs around the outside
+# show a swirly pulsing animation that runs around the outside of a neopixel jewel (7 LEDs)
 
 import time
 import board
