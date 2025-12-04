@@ -1,4 +1,8 @@
-//Check time examples for grabbing time from serial
+// program for displaying current time on LCD
+// time is gotten from Serial Console in Unix Time format w/ leading 'T' character
+
+// TODO:
+// check time examples for grabbing time from serial
 
 #include <LiquidCrystal.h>
 #include <TimeLib.h>
