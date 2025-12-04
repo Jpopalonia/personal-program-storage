@@ -1,4 +1,7 @@
 # aerith staff prop
+# shows a color on a 'materia' section for the selected spell
+# button 1 cycles between spells
+# button 2 plays selected animation on the rest of the staff
 
 # TODO:
 # improve animations for spells

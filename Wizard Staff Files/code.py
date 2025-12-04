@@ -1,5 +1,5 @@
-# The circuit contains 1 button that is used to swap between each mode
-# Modes: Prismatic White, Spectrum Cycling, Rave Mode, Static white, LEDs off
+# the circuit contains 1 button that is used to swap between each mode
+# modes: prismatic white, spectrum cycling, rave mode, static white, LEDs off (charge mode)
 
 import board
 import digitalio
