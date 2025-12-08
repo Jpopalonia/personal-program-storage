@@ -6,32 +6,43 @@
 # TODO:
 # improve animations for spells
 
+# general program imports
 import time
 import board
 import digitalio
 import neopixel
 
+# debouncer for button handling
 from adafruit_debouncer import Debouncer
 
+# adafruit_led_animation libraries
 from adafruit_led_animation.animation.solid import Solid
 from adafruit_led_animation.animation.blink import Blink
 from adafruit_led_animation.animation.pulse import Pulse
 
+# helper imports
 from adafruit_led_animation.helper import PixelSubset
 from adafruit_led_animation.sequence import AnimationSequence
 from adafruit_led_animation.group import AnimationGroup
 
+# color constant imports
 from adafruit_led_animation.color import *
 
 # pin definitions
 pixel_pin = board.NEOPIXEL
 button1_pin = board.BUTTON
 button2_pin = board.EXTERNAL_BUTTON
+button1_gnd_pin = board.D1
+button2_gnd_pin = board.D2
 
 # button 1 initialization
 button1_config = digitalio.DigitalInOut(button1_pin)
 button1_config.direction = digitalio.Direction.INPUT
 button1_config.pull = digitalio.Pull.UP
+
+button1Gnd = digitalio.DigitalInOut(button1_gnd_pin)
+button1Gnd.direction = digitalio.Direction.OUTPUT
+button1Gnd.value = False
 
 button1 = Debouncer(button1_config)
 
@@ -39,6 +50,10 @@ button1 = Debouncer(button1_config)
 button2_config = digitalio.DigitalInOut(button2_pin)
 button2_config.direction = digitalio.Direction.INPUT
 button2_config.pull = digitalio.Pull.UP
+
+button2Gnd = digitalio.DigitalInOut(button2_gnd_pin)
+button2Gnd.direction = digitalio.Direction.OUTPUT
+button2Gnd.value = False
 
 button2 = Debouncer(button2_config)
 
@@ -51,6 +66,7 @@ ext_pwr.value = True
 num_pixels = 18
 pixel_brightness = 1
 
+# neopixel subsets
 materia_pixels = neopixel.NeoPixel(pin = board.NEOPIXEL,
                                    n = 1,
                                    brightness = 0.5,
@@ -125,6 +141,8 @@ thundaga_materia_active = Solid(pixel_object = materia_pixels,
                                 color = YELLOW)
 
 # function definitions
+
+# increment currently selected spell index
 def change_spell():
     global current_spell
 
@@ -133,6 +151,7 @@ def change_spell():
     if current_spell > 3:
         current_spell = 0
 
+# play animation for currently selected spell
 def cast_spell():
     global current_spell
     now = time.monotonic()
@@ -154,7 +173,7 @@ def cast_spell():
         while time.monotonic() - now < 5:
             thundaga.animate()
     
-    staff_pixels.fill(0)
+    staff_pixels.fill(0) # blank out staff after finished spell animation
     staff_pixels.show()
 
 # main loop
