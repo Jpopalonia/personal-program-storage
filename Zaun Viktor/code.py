@@ -2,10 +2,10 @@
 
 import time
 import board
-import pwmio
 import adafruit_aw9523
 
 import pwm_lightness
+
 # precalculate gamma corrected values
 PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # look into this and re-learn how it works
 
@@ -17,13 +17,13 @@ aw = adafruit_aw9523.AW9523(i2c)
 aw.LED_modes = 0xFFFF
 aw.directions = 0xFFFF
 
-# maybe set max current to 50mA/0.05A?
+# does this mean 0.05A?
 aw.constant_current_range = 0.05
 
-aw.set_constant_current(0, 255) # set pin1 to max current (approx 37mA according to the datasheet)
+aw.set_constant_current(0, 255) # set pin1 to max current (approx 37mA according to the datasheet I think)
 aw.set_constant_current(1, 255) # set pin2 to max current
 
-# do these even support PWM? (probably not tbh)
+# external driver board pins
 pin1 = aw.get_pin(0)
 pin2 = aw.get_pin(1)
 
@@ -53,6 +53,6 @@ while True:
     if not increasing2:
         value2 -= 1
 
-    pin1.duty_cycle = PWM[value1]
-    pin2.duty_cycle = PWM[value2]
+    # pin 1 set current
+    # pin 2 set current
     time.sleep(0.02)
