@@ -3,6 +3,7 @@
 import time
 import board
 import pwmio
+import random
 
 import pwm_lightness
 PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # precalculate gamma corrected values
@@ -13,8 +14,8 @@ pin2 = pwmio.PWMOut(board.D4)
 increasing1 = True
 increasing2 = True
 
-value1 = 90
-value2 = 230
+value1 = random.randint(90, 230)
+value2 = random.randint(90, 230)
 
 while True:
     if value1 >= 255:
@@ -27,13 +28,13 @@ while True:
         increasing2 = True
     
     if increasing1:
-        value1 += 1
+        value1 += random.random(1, 5)
     if increasing2:
-        value2 += 1
+        value2 += random.random(1, 5)
     if not increasing1:
-        value1 -= 1
+        value1 -= random.random(1, 5)
     if not increasing2:
-        value2 -= 1
+        value2 -= random.random(1, 5)
 
     pin1.duty_cycle = PWM[value1]
     pin2.duty_cycle = PWM[value2]
