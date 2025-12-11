@@ -1,5 +1,8 @@
 # program to drive the LEDs and other devices in a full-body Warwick cosplay
 
+# TODO:
+# make
+
 # program imports
 import board
 import time
@@ -19,10 +22,10 @@ from adafruit_led_animation.group import AnimationGroup
 from adafruit_led_animation.color import *
 
 # global variable initialization
-rippy_dippy = True
+rippy_dippy = True # placeholder
 
 # function definitions
-def butts():
+def butts(): # placeholder
     return 'my butt'
 
 # main loop
