@@ -1,7 +1,8 @@
 # program to drive the LEDs and other devices in a full-body Warwick cosplay
 
 # TODO:
-# make
+# wtf board am I gonna use?
+# how the heck am I gonna hook everything up? probably just 1 pin per each
 # control either over IR or BTLE!?!
 # clean up unused imports (they take a lot of memory)
 
