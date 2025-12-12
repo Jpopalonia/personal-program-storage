@@ -6,6 +6,18 @@
 # control either over IR or BTLE!?!
 # clean up unused imports (they take a lot of memory)
 
+# parts list:
+# right gauntlet
+# left gauntlet
+# left shoulder
+# left forearm
+# right elbow
+# right oblique
+# eyes?
+# back of neck
+# back tank
+# belly?
+
 # program imports
 import board
 import time
@@ -14,19 +26,19 @@ import neopixel
 import digitalio
 
 # animation lib imports
-#from adafruit_led_animation.animation.pulse import Pulse
+from adafruit_led_animation.animation.pulse import Pulse
 from adafruit_led_animation.animation.comet import Comet
 from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 
 # animation helper imports
-#from adafruit_led_animation.helper import PixelSubset
-#from adafruit_led_animation.sequence import AnimationSequence
-#from adafruit_led_animation.group import AnimationGroup
+from adafruit_led_animation.helper import PixelSubset
+from adafruit_led_animation.sequence import AnimationSequence
+from adafruit_led_animation.group import AnimationGroup
 
 # color constant imports
 from adafruit_led_animation.color import *
 
-# neopixel options and initialization
+# neopixel settings and initialization
 neo_pin = board.NEOPIXEL
 num_pixels = 10
 neo_brightness = 0.1
@@ -38,7 +50,7 @@ pixels = neopixel.NeoPixel(
     auto_write = False
 )
 
-# animation options and initialization
+# animation settings and initialization
 comet_speed = 0.2
 comet_color = GREEN
 comet_bg_color = BLACK
