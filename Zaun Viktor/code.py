@@ -8,6 +8,8 @@ import board
 import pwmio
 import random
 
+from adafruit_simplemath import map_range
+
 from adafruit_led_animation.color import *
 
 import pwm_lightness
@@ -41,6 +43,17 @@ while True:
     if not increasing2:
         value2 -= random.random(1, 5)
 
-    pin1.duty_cycle = PWM[value1]
+    color = 1
+
+    # map pwm values to normalized values here
+    value = map_range(
+        x = color,
+        in_min = 0,
+        in_max = 255,
+        out_min = 0,
+        out_max = 255
+    )
+
+    pin1.duty_cycle = PWM[value1] # change these to use calculate_intensity()
     pin2.duty_cycle = PWM[value2]
     time.sleep(0.02)
