@@ -1,9 +1,14 @@
 # pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
 
+# TODO:
+# test with calculate_intensity() method from adafruit_led_animation
+
 import time
 import board
 import pwmio
 import random
+
+from adafruit_led_animation.color import *
 
 import pwm_lightness
 PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # precalculate gamma corrected values
