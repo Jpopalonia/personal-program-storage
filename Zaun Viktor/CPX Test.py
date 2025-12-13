@@ -40,17 +40,23 @@ pin2 = PixelSubset(
 increasing1 = True
 increasing2 = True
 
-value1 = random.randint(90, 230)
-value2 = random.randint(90, 230)
+lower_start = 90
+upper_start = 230
+
+value1 = random.randint(lower_start, upper_start)
+value2 = random.randint(lower_start, upper_start)
+
+lower = 32
+upper = 255
 
 while True:
-    if value1 >= 255:
+    if value1 >= upper:
         increasing1 = False
-    if value2 >= 255:
+    if value2 >= upper:
         increasing2 = False
-    if value1 <= 32:
+    if value1 <= lower:
         increasing1 = True
-    if value2 <= 32:
+    if value2 <= lower:
         increasing2 = True
     
     if increasing1:
