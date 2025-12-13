@@ -43,17 +43,7 @@ while True:
     if not increasing2:
         value2 -= random.random(1, 5)
 
-    color = 1
-
-    # map pwm values to normalized values here
-    value = map_range(
-        x = color,
-        in_min = 0,
-        in_max = 255,
-        out_min = 0,
-        out_max = 255
-    )
-
-    pin1.duty_cycle = PWM[value1] # change these to use calculate_intensity()
+    # color_intensity(color, intensity = 1.0)
+    pin1.duty_cycle = PWM[value1]
     pin2.duty_cycle = PWM[value2]
     time.sleep(0.02)
