@@ -64,7 +64,7 @@ while True:
 
     # map pwm values to normalized values here
     adj_value1 = map_range(
-        x = value1,
+        x = PWM[value1],
         in_min = 0,
         in_max = 255,
         out_min = 0,
@@ -72,7 +72,7 @@ while True:
     )
 
     adj_value2 = map_range(
-        x = value2,
+        x = PWM[value2],
         in_min = 0,
         in_max = 255,
         out_min = 0,
