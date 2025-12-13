@@ -43,20 +43,20 @@ increasing2 = True
 lower_start = 90
 upper_start = 230
 
+lower_limit = 32
+upper_limit = 255
+
 value1 = random.randint(lower_start, upper_start)
 value2 = random.randint(lower_start, upper_start)
 
-lower = 32
-upper = 255
-
 while True:
-    if value1 >= upper:
+    if value1 >= upper_limit:
         increasing1 = False
-    if value2 >= upper:
+    if value2 >= upper_limit:
         increasing2 = False
-    if value1 <= lower:
+    if value1 <= lower_limit:
         increasing1 = True
-    if value2 <= lower:
+    if value2 <= lower_limit:
         increasing2 = True
     
     if increasing1:
