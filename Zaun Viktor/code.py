@@ -8,8 +8,6 @@ import board
 import pwmio
 import random
 
-from adafruit_simplemath import map_range
-
 from adafruit_led_animation.color import *
 
 import pwm_lightness
