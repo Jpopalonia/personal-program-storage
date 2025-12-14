@@ -77,8 +77,6 @@ while True:
     adj_value1 = normalize(value1)
     adj_value2 = normalize(value2)
 
-    print(value1, adj_value1, value2, adj_value2, sep = ", ")
-
     color1 = calculate_intensity(PINK, adj_value1)
     color2 = calculate_intensity(PINK, adj_value2)
 
