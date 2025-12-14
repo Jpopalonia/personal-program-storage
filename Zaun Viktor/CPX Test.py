@@ -9,14 +9,16 @@ import pwmio
 import random
 import neopixel
 
-from adafruit_simplemath import map_range
+from adafruit_fancyled.adafruit_fancyled import normalize
+
+from adafruit_simplemath import constrain
 
 from adafruit_led_animation.helper import PixelSubset
 
 from adafruit_led_animation.color import *
 
-import pwm_lightness
-PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # precalculate gamma corrected values
+#import pwm_lightness
+#PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # precalculate gamma corrected values
 
 pixels = neopixel.NeoPixel(
     pin = board.NEOPIXEL,
@@ -37,13 +39,13 @@ pin2 = PixelSubset(
     end = 10
 )
 
-increasing1 = True
+increasing1 = False
 increasing2 = True
 
 lower_start = 90
 upper_start = 230
 
-lower_limit = 32
+lower_limit = 5
 upper_limit = 255
 
 value1 = random.randint(lower_start, upper_start)
@@ -60,33 +62,28 @@ while True:
         increasing2 = True
     
     if increasing1:
-        value1 += random.random(1, 5)
+        value1 += random.randint(1, 5)
     if increasing2:
-        value2 += random.random(1, 5)
+        value2 += random.randint(1, 5)
     if not increasing1:
-        value1 -= random.random(1, 5)
+        value1 -= random.randint(1, 5)
     if not increasing2:
-        value2 -= random.random(1, 5)
+        value2 -= random.randint(1, 5)
+
+    value1 = constrain(value1, 0, 255)
+    value2 = constrain(value2, 0, 255)
 
     # map pwm values to normalized values here
-    adj_value1 = map_range(
-        x = PWM[value1],
-        in_min = 0,
-        in_max = 255,
-        out_min = 0,
-        out_max = 1
-    )
+    adj_value1 = normalize(value1)
+    adj_value2 = normalize(value2)
 
-    adj_value2 = map_range(
-        x = PWM[value2],
-        in_min = 0,
-        in_max = 255,
-        out_min = 0,
-        out_max = 1
-    )
+    print(value1, adj_value1, value2, adj_value2, sep = ", ")
 
-    pin1.fill(adj_value1)
-    pin2.fill(adj_value2)
+    color1 = calculate_intensity(PINK, adj_value1)
+    color2 = calculate_intensity(PINK, adj_value2)
 
-    pin1.show()
-    pin2.show()
+    pin1.fill(color1)
+    pin2.fill(color2)
+
+    pixels.show()
+    time.sleep(0.05)
