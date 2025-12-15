@@ -1,17 +1,17 @@
 # pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
 
 # TODO:
-# test with calculate_intensity() method from adafruit_led_animation
+# fix?
 
 import time
 import board
-import pwmio
+#import pwmio
 import random
 import neopixel
 
-from adafruit_fancyled.adafruit_fancyled import normalize
+import adafruit_fancyled.adafruit_fancyled as fancy
 
-from adafruit_simplemath import constrain
+import adafruit_simplemath as simple_math
 
 from adafruit_led_animation.helper import PixelSubset
 
@@ -23,7 +23,7 @@ from adafruit_led_animation.color import *
 pixels = neopixel.NeoPixel(
     pin = board.NEOPIXEL,
     n = 10,
-    brightness = 1,
+    brightness = 0.1,
     auto_write = False
 )
 
@@ -52,6 +52,7 @@ value1 = random.randint(lower_start, upper_start)
 value2 = random.randint(lower_start, upper_start)
 
 while True:
+    # check if any have hit the bounds
     if value1 >= upper_limit:
         increasing1 = False
     if value2 >= upper_limit:
@@ -61,6 +62,7 @@ while True:
     if value2 <= lower_limit:
         increasing2 = True
     
+    # step value in time
     if increasing1:
         value1 += random.randint(1, 5)
     if increasing2:
@@ -70,12 +72,13 @@ while True:
     if not increasing2:
         value2 -= random.randint(1, 5)
 
-    value1 = constrain(value1, 0, 255)
-    value2 = constrain(value2, 0, 255)
+    # color correction done below
+    value1 = simple_math.constrain(value1, 0, 255)
+    value2 = simple_math.constrain(value2, 0, 255)
 
     # map pwm values to normalized values here
-    adj_value1 = normalize(value1)
-    adj_value2 = normalize(value2)
+    adj_value1 = fancy.normalize(value1)
+    adj_value2 = fancy.normalize(value2)
 
     color1 = calculate_intensity(PINK, adj_value1)
     color2 = calculate_intensity(PINK, adj_value2)
