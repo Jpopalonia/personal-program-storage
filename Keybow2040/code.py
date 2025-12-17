@@ -4,15 +4,14 @@
 
 # A simple example of how to set up a keymap and HID keyboard on Keybow 2040.
 
-# You'll need to connect Keybow 2040 to a computer, as you would with a regular
-# USB keyboard.
+# You'll need to connect Keybow 2040 to a computer, as you would with a regular USB keyboard.
 
 # Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
 
 # NOTE! Requires the adafruit_hid CircuitPython library also!
 
 # TODO:
-# broken? need to troubleshoot, does not play properly on keybow board
+# broken? need to troubleshoot, does not run properly on keybow board
 
 import board
 from keybow2040 import Keybow2040
