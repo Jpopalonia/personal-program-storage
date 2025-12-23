@@ -8,7 +8,7 @@
     "python.analysis.extraPaths": [
         "c:\\Users\\Corey\\.vscode\\extensions\\wmerkens.vscode-circuitpython-v2-0.3.3\\boards\\0x16D0\\0x08C6",
         "c:\\Users\\Corey\\.vscode\\extensions\\wmerkens.vscode-circuitpython-v2-0.3.3\\stubs",
-        "c:\\Users\\Corey\\AppData\\Roaming\\Code\\User\\globalStorage\\wmerkens.vscode-circuitpython-v2\\bundle\\20251214\\adafruit-circuitpython-bundle-py-20251214\\lib"
+        "c:\\Users\\Corey\\AppData\\Roaming\\Code\\User\\globalStorage\\wmerkens.vscode-circuitpython-v2\\bundle\\20251219\\adafruit-circuitpython-bundle-py-20251219\\lib"
     ],
     "circuitpython.board.vid": "0x16D0",
     "circuitpython.board.pid": "0x08C6"
