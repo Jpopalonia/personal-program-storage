@@ -18,18 +18,6 @@
 # back tank
 # belly?
 
-# neopixel settings
-neo_pin = board.NEOPIXEL
-num_pixels = 10
-neo_brightness = 0.1
-
-# animation settings
-comet_speed = 0.2
-comet_color = GREEN
-comet_bg_color = BLACK
-comet_tail_length = 13
-comet_ring_mode = True
-
 # program imports
 import board
 import time
@@ -49,6 +37,17 @@ from adafruit_led_animation.group import AnimationGroup
 
 # color constant imports
 from adafruit_led_animation.color import *
+# neopixel settings
+neo_pin = board.NEOPIXEL
+num_pixels = 10
+neo_brightness = 0.1
+
+# animation settings
+comet_speed = 0.2
+comet_color = GREEN
+comet_bg_color = BLACK
+comet_tail_length = 13
+comet_ring_mode = True
 
 # neopixel initialization
 pixels = neopixel.NeoPixel( # initial testing neopixel object
