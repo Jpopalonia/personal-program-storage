@@ -3,7 +3,7 @@ import board
 from .switches.gpio import GPIO as Switches
 from .display.keybow2040 import Keybow2040 as Display
 
-from . import Keybow
+from . import PMK
 
 # These are the 16 switches on Keybow, with their board-defined names.
 _PINS = [board.SW0,
@@ -23,7 +23,7 @@ _PINS = [board.SW0,
         board.SW14,
         board.SW15]
 
-class PIM56X(Keybow):
+class Keybow2040(PMK):
     def __init__(self):
         self._i2c = board.I2C()
         self._switches = Switches(_PINS)

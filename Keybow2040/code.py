@@ -2,29 +2,41 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This example demonstrates how to light keys when pressed.
+# This example displays a rainbow animation on Keybow 2040's keys.
 
-# Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
+# Drop the `pmk` folder
+# into your `lib` folder on your `CIRCUITPY` drive.
 
-import board
-from keybow2040 import Keybow2040
+import math
+from pmk import PMK, number_to_xy, hsv_to_rgb
+from pmk.platform.keybow2040 import Keybow2040 as Hardware          # for Keybow 2040
+# from pmk.platform.rgbkeypadbase import RGBKeypadBase as Hardware  # for Pico RGB Keypad Base
 
 # Set up Keybow
-i2c = board.I2C()
-keybow = Keybow2040(i2c)
+keybow = PMK(Hardware())
 keys = keybow.keys
 
-# Use cyan as the colour.
-rgb = (0, 255, 255)
+# Increment step to shift animation across keys.
+step = 0
 
 while True:
     # Always remember to call keybow.update() on every iteration of your loop!
     keybow.update()
 
-    # Loop through the keys and set the LED to cyan if pressed, otherwise turn
-    # it off (set it to black).
-    for key in keys:
-        if key.pressed:
-            key.set_led(*rgb)
-        else:
-            key.set_led(0, 0, 0)
+    step += 1
+
+    for i in range(16):
+        # Convert the key number to an x/y coordinate to calculate the hue
+        # in a matrix style-y.
+        x, y = number_to_xy(i)
+
+        # Calculate the hue.
+        hue = (x + y + (step / 20)) / 8
+        hue = hue - int(hue)
+        hue = hue - math.floor(hue)
+
+        # Convert the hue to RGB values.
+        r, g, b = hsv_to_rgb(hue, 1, 1)
+
+        # Display it on the key!
+        keys[i].set_led(r, g, b)

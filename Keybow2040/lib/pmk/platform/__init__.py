@@ -1,4 +1,4 @@
-class Keybow:
+class PMK:
     """
     Abstract class providing common interface to RGB-backlit keyboard
     Subclasses should fill _switches and _display properties.

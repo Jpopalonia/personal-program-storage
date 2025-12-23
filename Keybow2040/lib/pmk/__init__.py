@@ -3,69 +3,62 @@
 # SPDX-License-Identifier: MIT
 
 """
-`Keybow 2040 CircuitPython library`
+`PMK CircuitPython library`
 ====================================================
 
-CircuitPython driver for the Pimoroni Keybow 2040.
+PMK: Pimoroni Mechanical/Mushy Keypads
 
-Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
+CircuitPython driver for the Pimoroni Keybow 2040 and Pico RGB Keypad Base.
 
-* Author: Sandy Macdonald
+Drop the `lib` contents (`pmk.py` file and `pmk_platform` folder)
+into your `lib` folder on your `CIRCUITPY` drive.
+
+* Authors: Sandy Macdonald, Maciej Sokolowski
 
 Notes
 --------------------
 
 **Hardware:**
 
+One of:
+
 * Pimoroni Keybow 2040
   <https://shop.pimoroni.com/products/keybow-2040>_
 
+* Pimoroni Pico RGB Keypad Base
+  <https://shop.pimoroni.com/products/pico-rgb-keypad-base>_
+
 **Software and Dependencies:**
+
+For Keybow 2040:
 
 * Adafruit CircuitPython firmware for Keybow 2040:
   <https://circuitpython.org/board/pimoroni_keybow2040/>_
 
 * Adafruit CircuitPython IS31FL3731 library:
   <https://github.com/adafruit/Adafruit_CircuitPython_IS31FL3731>_
+
+For Pico RGB Keypad Base:
+
+* Adafruit CircuitPython firmware for Raspberry Pi Pico:
+  <https://circuitpython.org/board/raspberry_pi_pico/>_
+
+* Adafruit CircuitPython DotStar library:
+  <https://github.com/adafruit/Adafruit_CircuitPython_DotStar>_
+
 """
 
 import time
-import board
 
-from adafruit_is31fl3731.keybow2040 import Keybow2040 as Display
-from digitalio import DigitalInOut, Direction, Pull
-
-# These are the 16 switches on Keybow, with their board-defined names.
-_PINS = [board.SW0,
-        board.SW1,
-        board.SW2,
-        board.SW3,
-        board.SW4,
-        board.SW5,
-        board.SW6,
-        board.SW7,
-        board.SW8,
-        board.SW9,
-        board.SW10,
-        board.SW11,
-        board.SW12,
-        board.SW13,
-        board.SW14,
-        board.SW15]
-
-NUM_KEYS = 16
-
-
-class Keybow2040(object):
+class PMK(object):
     """
-    Represents a Keybow 2040 and hence a set of Key instances with
+    Represents a set of Key instances with
     associated LEDs and key behaviours.
 
-    :param i2c: the I2C bus for Keybow 2040
+    :param hardware: object representing a board hardware
     """
-    def __init__(self, i2c):
-        self.pins = _PINS
-        self.display = Display(i2c)
+    def __init__(self, hardware):
+        self.hardware = hardware
         self.keys = []
         self.time_of_last_press = time.monotonic()
         self.time_since_last_press = None
@@ -74,10 +67,10 @@ class Keybow2040(object):
         self.sleeping = False
         self.was_asleep = False
         self.last_led_states = None
-        # self.rotation = 0
+        self.rotation = 0
 
-        for i in range(len(self.pins)):
-            _key = Key(i, self.pins[i], self.display)
+        for i in range(self.hardware.num_keys()):
+            _key = Key(i, self.hardware)
             self.keys.append(_key)
 
     def update(self):
@@ -222,37 +215,36 @@ class Keybow2040(object):
         else:
             return attach_handler
 
-    # def rotate(self, degrees):
-    #     # Rotates all of Keybow's keys by a number of degrees, clamped to
-    #     # the closest multiple of 90 degrees. Because it shuffles the order
-    #     # of the Key instances, all of the associated attributes of the key
-    #     # are retained. The x/y coordinate of the keys are rotated also. It
-    #     # also handles negative degrees, e.g. -90 to rotate 90 degrees anti-
-    #     # clockwise.
+    def rotate(self, degrees):
+        # Rotates all of Keybow's keys by a number of degrees, clamped to
+        # the closest multiple of 90 degrees. Because it shuffles the order
+        # of the Key instances, all of the associated attributes of the key
+        # are retained. The x/y coordinate of the keys are rotated also. It
+        # also handles negative degrees, e.g. -90 to rotate 90 degrees anti-
+        # clockwise.
 
-    #     # Rotate as follows: `keybow.rotate(270)`
+        # Rotate as follows: `keybow.rotate(270)`
 
-    #     self.rotation = degrees
-    #     num_rotations = degrees // 90
+        old_rotation = self.rotation
+        self.rotation += degrees
+        num_rotations = (round(self.rotation / 90) - round(old_rotation / 90)) % 4
 
-    #     if num_rotations == 0:
-    #         return
+        if num_rotations == 0:
+            return
 
-    #     if num_rotations < 1:
-    #         num_rotations = 4 + num_rotations
+        matrix = [[(x * 4) + y for y in range(4)] for x in range(4)]
 
-    #     matrix = [[(x * 4) + y for y in range(4)] for x in range(4)]
+        for r in range(num_rotations):
+            matrix = zip(*matrix[::-1])
+            matrix = [list(x) for x in list(matrix)]
 
-    #     for r in range(num_rotations):
-    #         matrix = zip(*matrix[::-1])
-    #         matrix = [list(x) for x in list(matrix)]
+        flat_matrix = [x for y in matrix for x in y]
 
-    #     flat_matrix = [x for y in matrix for x in y]
+        for i in range(len(self.keys)):
+            self.keys[i].number = flat_matrix[i]
+            self.keys[i].update_xy()
 
-    #     for i in range(len(self.keys)):
-    #         self.keys[i].number = flat_matrix[i]
-
-    #     self.keys = sorted(self.keys, key=lambda x:x.number)
+        self.keys = sorted(self.keys, key=lambda x:x.number)
 
 
 class Key:
@@ -261,17 +253,14 @@ class Key:
     LED behaviours.
 
     :param number: the key number (0-15) to associate with the key
-    :param pin: the pin object for the key, e.g. board.SW0
-    :param display: the IS31FL3731 matrix instance for the LEDs
+    :param hardware:  object representing a board hardware
     """
-    def __init__(self, number, pin, display):
-        self.pin = pin
+    def __init__(self, number, hardware):
+        self.hardware = hardware
         self.number = number
-        self.switch = DigitalInOut(self.pin)
-        self.switch.direction = Direction.INPUT
-        self.switch.pull = Pull.UP
+        self.hw_number = number
         self.state = 0
-        self.pressed = 0
+        self.pressed = False
         self.last_state = None
         self.time_of_last_press = time.monotonic()
         self.time_since_last_press = None
@@ -281,9 +270,6 @@ class Key:
         self.modifier = False
         self.rgb = [0, 0, 0]
         self.lit = False
-        self.xy = self.get_xy()
-        self.x, self.y = self.xy
-        self.display = display
         self.led_off()
         self.press_function = None
         self.release_function = None
@@ -292,11 +278,12 @@ class Key:
         self.hold_func_fired = False
         self.debounce = 0.125
         self.key_locked = False
+        self.update_xy()
 
     def get_state(self):
         # Returns the state of the key (0=not pressed, 1=pressed).
 
-        return int(not self.switch.value)
+        return int(self.hardware.switch_state(self.hw_number))
 
     def update(self):
         # Updates the state of the key and updates all of its
@@ -311,7 +298,7 @@ class Key:
             self.key_locked = False
 
         self.state = self.get_state()
-        self.pressed = self.state
+        self.pressed = bool(self.state)
         update_time = time.monotonic()
 
         # If there's a `press_function` attached, then call it,
@@ -357,6 +344,10 @@ class Key:
             self.held = False
             self.hold_func_fired = False
 
+    def update_xy(self):
+        self.xy = self.get_xy()
+        self.x, self.y = self.xy
+
     def get_xy(self):
         # Returns the x/y coordinate of a key from 0,0 to 3,3.
 
@@ -365,7 +356,7 @@ class Key:
     def get_number(self):
         # Returns the key number, from 0 to 15.
 
-        return xy_to_number(self.x, self.y)
+        return self.number
 
     def is_modifier(self):
         # Designates a modifier key, so you can hold the modifier
@@ -385,7 +376,7 @@ class Key:
             self.lit = True
             self.rgb = [r, g, b]
 
-        self.display.pixelrgb(self.x, self.y, r, g, b)
+        self.hardware.set_pixel(self.hw_number, r, g, b)
 
     def led_on(self):
         # Turn the LED on, using its current RGB value.

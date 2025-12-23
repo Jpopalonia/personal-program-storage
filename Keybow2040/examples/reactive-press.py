@@ -4,14 +4,16 @@
 
 # This example demonstrates how to light keys when pressed.
 
-# Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
+# Drop the `pmk` folder
+# into your `lib` folder on your `CIRCUITPY` drive.
 
-import board
-from keybow2040 import Keybow2040
+
+from pmk import PMK
+from pmk.platform.keybow2040 import Keybow2040 as Hardware          # for Keybow 2040
+# from pmk.platform.rgbkeypadbase import RGBKeypadBase as Hardware  # for Pico RGB Keypad Base
 
 # Set up Keybow
-i2c = board.I2C()
-keybow = Keybow2040(i2c)
+keybow = PMK(Hardware())
 keys = keybow.keys
 
 # Use cyan as the colour.
