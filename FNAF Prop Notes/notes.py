@@ -1,3 +1,5 @@
+# imitates the door light flash from FNAF 1
+
 import random
 
 # FNAF 1 door light flicker
