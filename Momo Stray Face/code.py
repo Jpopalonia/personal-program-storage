@@ -58,6 +58,9 @@ display.refresh()
 main_group = displayio.Group()
 display.root_group = main_group
 
+# prevent REPL from showing on screen
+board.DISPLAY.root_group = None
+
 # load PNG background into memory (maybe)
 
 # load faces into memory
