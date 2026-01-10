@@ -2,13 +2,15 @@
 
 import time
 import board
+import pwmio
 
 import pwm_lightness
 
 # precalculate gamma corrected values
 PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # look into this and re-learn how it works
 
-# may need fixed once i can get my hands on a board for testing
+led1 = board.D3
+led2 = board.D4
 
 increasing1 = True
 increasing2 = True
