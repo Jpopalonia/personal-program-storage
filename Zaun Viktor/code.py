@@ -1,7 +1,7 @@
 # pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
 
 # TODO:
-# test with calculate_intensity() method from adafruit_led_animation
+# done for now
 
 import time
 import board
