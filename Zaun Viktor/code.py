@@ -1,4 +1,5 @@
 # pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
+# this version uses the aw9523 led driver board over i2c
 
 import time
 import board
