@@ -1,16 +1,17 @@
 # pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
 
+# TODO:
+# done for now
+
 import time
 import board
 import pwmio
 
 import pwm_lightness
+PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # precalculate gamma corrected values
 
-# precalculate gamma corrected values
-PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # look into this and re-learn how it works
-
-led1 = board.D3
-led2 = board.D4
+pin1 = pwmio.PWMOut(board.D3)
+pin2 = pwmio.PWMOut(board.D4)
 
 increasing1 = True
 increasing2 = True
@@ -18,7 +19,6 @@ increasing2 = True
 value1 = 90
 value2 = 230
 
-# main loop (elaborate on how this works, maybe roll up some functions from this)
 while True:
     if value1 >= 255:
         increasing1 = False
@@ -38,6 +38,7 @@ while True:
     if not increasing2:
         value2 -= 1
 
-    # pin 1 set current
-    # pin 2 set current
+    # color_intensity(color, intensity = 1.0)
+    pin1.duty_cycle = PWM[value1]
+    pin2.duty_cycle = PWM[value2]
     time.sleep(0.02)
