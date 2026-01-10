@@ -1,5 +1,8 @@
 # pulses 2 LED n00ds on different phases to create an effect of fluid flowing through a tube
 
+# TODO:
+# done for now
+
 import time
 import board
 import pwmio
@@ -35,6 +38,7 @@ while True:
     if not increasing2:
         value2 -= 1
 
+    # color_intensity(color, intensity = 1.0)
     pin1.duty_cycle = PWM[value1]
     pin2.duty_cycle = PWM[value2]
     time.sleep(0.02)
