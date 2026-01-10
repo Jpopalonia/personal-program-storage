@@ -2,7 +2,6 @@
 
 import time
 import board
-import adafruit_aw9523
 
 import pwm_lightness
 
@@ -10,22 +9,6 @@ import pwm_lightness
 PWM = pwm_lightness.get_pwm_table(0xffff, max_input=255) # look into this and re-learn how it works
 
 # may need fixed once i can get my hands on a board for testing
-i2c = board.I2C()
-aw = adafruit_aw9523.AW9523(i2c)
-
-# set all pins to output and LED (constant current) mode
-aw.LED_modes = 0xFFFF
-aw.directions = 0xFFFF
-
-# does this mean 0.05A?
-aw.constant_current_range = 0.05
-
-aw.set_constant_current(0, 255) # set pin1 to max current (approx 37mA according to the datasheet I think)
-aw.set_constant_current(1, 255) # set pin2 to max current
-
-# external driver board pins
-pin1 = aw.get_pin(0)
-pin2 = aw.get_pin(1)
 
 increasing1 = True
 increasing2 = True
