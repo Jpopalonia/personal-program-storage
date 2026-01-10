@@ -62,7 +62,7 @@ ext_pwr = digitalio.DigitalInOut(board.EXTERNAL_POWER)
 ext_pwr.direction = digitalio.Direction.OUTPUT
 ext_pwr.value = True
 
-# neopixel initialization
+# neopixel settings
 num_pixels = 18
 pixel_brightness = 1
 
