@@ -1,8 +1,5 @@
 # pwm gamma correction from adafruit example
 
-# TODO:
-# learn how to do this, maybe write my own
-
 try:
     from typing import Sequence
 except ImportError:
