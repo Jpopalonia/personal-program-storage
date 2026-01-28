@@ -9,13 +9,15 @@
 # You'll need to connect Keybow 2040 to a computer running a DAW like Ableton,
 # or other software synth, or to a hardware synth that accepts USB MIDI.
 
-# Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
+# Drop the `pmk` folder
+# into your `lib` folder on your `CIRCUITPY` drive.
 
 # NOTE! Requires the adafruit_midi CircuitPython library also!
 
 import time
-import board
-from keybow2040 import Keybow2040
+from pmk import PMK
+from pmk.platform.keybow2040 import Keybow2040 as Hardware          # for Keybow 2040
+# from pmk.platform.rgbkeypadbase import RGBKeypadBase as Hardware  # for Pico RGB Keypad Base
 
 import usb_midi
 import adafruit_midi
@@ -23,8 +25,7 @@ from adafruit_midi.note_off import NoteOff
 from adafruit_midi.note_on import NoteOn
 
 # Set up Keybow
-i2c = board.I2C()
-keybow = Keybow2040(i2c)
+keybow = PMK(Hardware())
 keys = keybow.keys
 
 # Set USB MIDI up on channel 0.
@@ -41,7 +42,7 @@ velocity = 100
 bpm = 80
 
 # Play 16th notes
-note_length = 1/16
+note_length = 1 / 16
 
 # Assumes BPM is calculated on quarter notes
 note_time = 60 / bpm * (note_length * 4)
@@ -80,7 +81,7 @@ while True:
             # Any keys that were pressed, but are no longer, turn LED off
             # and send MIDI note off for the respective note.
             for k in missing:
-                note = start_note +k
+                note = start_note + k
                 midi.send(NoteOff(note, 0))
                 keys[k].set_led(0, 0, 0)
 
@@ -133,7 +134,7 @@ while True:
                     last_note = this_note
 
                     # For the up-down style, switch direction at either end
-                    if arp_style == 2 and this_note == len(notes) -1:
+                    if arp_style == 2 and this_note == len(notes) - 1:
                         direction = -1
                     elif arp_style == 2 and this_note == 0:
                         direction = 1

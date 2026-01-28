@@ -5,11 +5,11 @@ from digitalio import DigitalInOut, Direction
 from .switches.tca9555 import TCA9555 as Switches
 from .display.dotstar import Dotstar as Display
 
-from . import Keybow
+from . import PMK
 
 NUM_KEYS = 16
 
-# Let's match PIM56X orientation
+# Let's match Keybow2040 orientation
 _ROTATED = {
     0:  12,  1:  8,  2: 4,  3: 0,
     4:  13,  5:  9,  6: 5,  7: 1,
@@ -17,7 +17,7 @@ _ROTATED = {
     12: 15, 13: 11, 14: 7, 15: 3,
 }
 
-class PIM551(Keybow):
+class RGBKeypadBase(PMK):
     def __init__(self):
         self._i2c = busio.I2C(board.GP5, board.GP4)
         self._switches = Switches(self._i2c, NUM_KEYS)

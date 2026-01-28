@@ -4,15 +4,16 @@
 
 # This example displays a rainbow animation on Keybow 2040's keys.
 
-# Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
+# Drop the `pmk` folder
+# into your `lib` folder on your `CIRCUITPY` drive.
 
 import math
-import board
-from keybow2040 import Keybow2040, number_to_xy, hsv_to_rgb
+from pmk import PMK, number_to_xy, hsv_to_rgb
+from pmk.platform.keybow2040 import Keybow2040 as Hardware          # for Keybow 2040
+# from pmk.platform.rgbkeypadbase import RGBKeypadBase as Hardware  # for Pico RGB Keypad Base
 
 # Set up Keybow
-i2c = board.I2C()
-keybow = Keybow2040(i2c)
+keybow = PMK(Hardware())
 keys = keybow.keys
 
 # Increment step to shift animation across keys.

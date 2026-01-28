@@ -4,7 +4,7 @@
 
 # An advanced example of how to set up a HID keyboard.
 
-# There are three layers, selected by pressing and holding key 0 (bottom left), 
+# There are three layers, selected by pressing and holding key 0 (bottom left),
 # then tapping one of the coloured layer selector keys above it to switch layer.
 
 # The layer colours are as follows:
@@ -17,13 +17,15 @@
 # You'll need to connect Keybow 2040 to a computer, as you would with a regular
 # USB keyboard.
 
-# Drop the keybow2040.py file into your `lib` folder on your `CIRCUITPY` drive.
+# Drop the `pmk` folder
+# into your `lib` folder on your `CIRCUITPY` drive.
 
 # NOTE! Requires the adafruit_hid CircuitPython library also!
 
-import board
 import time
-from keybow2040 import Keybow2040
+from pmk import PMK
+from pmk.platform.keybow2040 import Keybow2040 as Hardware          # for Keybow 2040
+# from pmk.platform.rgbkeypadbase import RGBKeypadBase as Hardware  # for Pico RGB Keypad Base
 
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
@@ -34,8 +36,7 @@ from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 # Set up Keybow
-i2c = board.I2C()
-keybow = Keybow2040(i2c)
+keybow = PMK(Hardware())
 keys = keybow.keys
 
 # Set up the keyboard and layout
@@ -48,7 +49,7 @@ consumer_control = ConsumerControl(usb_hid.devices)
 # Our layers. The key of item in the layer dictionary is the key number on
 # Keybow to map to, and the value is the key press to send.
 
-# Note that keys 0-3 are reserved as the modifier and layer selector keys 
+# Note that keys 0-3 are reserved as the modifier and layer selector keys
 # respectively.
 
 layer_1 =     {4: Keycode.ZERO,
@@ -105,8 +106,8 @@ layer_keys = range(4, 16)
 for k in layers[current_layer].keys():
     keys[k].set_led(*colours[current_layer])
 
-# To prevent the strings (as opposed to single key presses) that are sent from 
-# refiring on a single key press, the debounce time for the strings has to be 
+# To prevent the strings (as opposed to single key presses) that are sent from
+# refiring on a single key press, the debounce time for the strings has to be
 # longer.
 short_debounce = 0.03
 long_debounce = 0.15
@@ -131,7 +132,7 @@ while True:
                 if selectors[layer].pressed:
                     current_layer = layer
 
-                    # Set the key LEDs first to off, then to their layer colour
+                    # Set the key LEDs first to off, then to their layer colour
                     for k in layer_keys:
                         keys[k].set_led(0, 0, 0)
 
